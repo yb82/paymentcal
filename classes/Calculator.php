@@ -127,10 +127,10 @@ class Calculator{
 		}
 		$outputMaterial = new Outputform("Material Fee",$this->today,$materialFee);
 		$this->paymentPlan[] = $outputMaterial;
-		if($moreThan2Courses){
-			$outputRecord = new Outputform("Material Fee", $this->today,$this->fee->paymentPlanFee );
+		
+			$outputRecord = new Outputform("Payment Plan Fee", $this->today,$this->fee->paymentPlanFee );
 			$this->paymentPlan[] =$outputRecord;
-		}
+		
 	}
 
 	public function getAllPaymentPlan(){
@@ -159,7 +159,12 @@ class Calculator{
 		foreach ($this->selectedCourseDataDetail as $key => $value) {
 			$tuition[] = $value->tuitionFee ;	
 		}
-		$tuition[count($tuition)-1] -= $this->fee->package;
+		if($tuition[count($tuition)]>=2){
+			$tuition[count($tuition)-1] -= $this->fee->package;
+		}
+		if($tuition[count($tuition)]>=3){
+			$tuition[count($tuition)-1] -= $this->fee->package1;
+		}
 
 		$tempPaymentPlan[0]= 1000;
 		$tempPaymentPlan[1]= 1000;
@@ -291,7 +296,7 @@ class Calculator{
 
 
 
-		
+
 		foreach ($this->selectedCourseDataDetail as $key => $value) {
 			$tuition[] = $value->tuitionFee ;	
 		}
@@ -445,7 +450,9 @@ class Calculator{
 			do{
 				$this->error .=" Payments <br/>";
 				$outputPayment = new Outputform(TUITION, $this->dateToString($paymentDue),1000,$courseName);
+				if($counter == 0 ) $paymentDue->modify("+17 day");
 				$reminder -=1000;
+
 				if ($counter == 0) {
 					$paymentDue = $startdate;
 					$paymentDue->modify(TENWEEKS);					
@@ -472,11 +479,17 @@ class Calculator{
 		{
 			$tempPayment = array($reminder*0.3, $reminder*0.2, $reminder*0.3, $reminder*0.2);
 			$paymentDue = $startdate;
-			$tempDueDate = array($this->today, $this-dateToString($paymentDue->modify(SECONDPAYMENTDATE)), $this-dateToString($paymentDue->modify(FOURWEEKS)),$this-dateToString($paymentDue->modify(FOURWEEK)));
+
+			$tempDueDate = array($this->today);
+			$tempDueDate[] =  $this->dateToString($paymentDue->modify(SECONDPAYMENTDATE));
+			$paymentDue->modify("+17 day");
+			$tempDueDate[] =  $this->dateToString($paymentDue->modify(TENWEEKS));
+			$tempDueDate[] = $this->dateToString($paymentDue->modify(FOURWEEKS));
 			$i =0;
 			foreach ($tempDueDate as $key => $value) {
 				$outputPayment = new Outputform(TUITION,$value,$tempPayment[$i],$courseName);
 				$this->paymentPlan[] = $outputPayment;
+				$i++;
 			}
 			
 		}
