@@ -159,11 +159,12 @@ class Calculator{
 		foreach ($this->selectedCourseDataDetail as $key => $value) {
 			$tuition[] = $value->tuitionFee ;	
 		}
-		if($tuition[count($tuition)]>=2){
-			$tuition[count($tuition)-1] -= $this->fee->package;
-		}
-		if($tuition[count($tuition)]>=3){
-			$tuition[count($tuition)-1] -= $this->fee->package1;
+		$courseCnt =count($tuition);
+		if($courseCnt==2){
+		$tuition[$courseCnt-1] -= $this->fee->package;
+		}elseif ($courseCnt >=3) {
+			# code...
+			$tuition[$courseCnt-1] -= $this->fee->package1;
 		}
 
 		$tempPaymentPlan[0]= 1000;
@@ -300,9 +301,13 @@ class Calculator{
 		foreach ($this->selectedCourseDataDetail as $key => $value) {
 			$tuition[] = $value->tuitionFee ;	
 		}
-
-		$tuition[count($tuition)-1] -= $this->fee->package;
-
+		$courseCnt =count($tuition);
+		if($courseCnt==2){
+		$tuition[$courseCnt-1] -= $this->fee->package;
+		}elseif ($courseCnt >=3) {
+			# code...
+			$tuition[$courseCnt-1] -= $this->fee->package1;
+		}
 
 
 
@@ -377,7 +382,13 @@ class Calculator{
 			$tuition[] = $value->tuitionFee ;	
 		}
 
-		$tuition[count($tuition)-1] -= $this->fee->package;
+		$courseCnt =count($tuition);
+		if($courseCnt==2){
+		$tuition[$courseCnt-1] -= $this->fee->package;
+		}elseif ($courseCnt >=3) {
+			# code...
+			$tuition[$courseCnt-1] -= $this->fee->package1;
+		}
 
 		//$tempCourseName[]= $courseName[0];
 		$counter =1;
